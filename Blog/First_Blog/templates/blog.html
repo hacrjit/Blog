@@ -1,0 +1,63 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    {{ title }}
+{% endblock %}
+
+{% block content %}
+    <h1 class="text-center">
+        Blogs
+    </h1>
+
+    <a class="btn btn-primary mb-4" href="{% url 'blog_create' %}">
+        Post a Blog
+    </a>
+
+    <div class="container row gap-3">
+        {% for post in posts %}
+        <div class="card" style="width: 18rem;">
+            <img src="{{ post.photo.url }}" class="card-img-top" style="height: 200px; object-fit: cover;" alt="...">
+        
+            <div class="card-body">
+                <h5 class="card-title">{{ post.title }}</h5>
+                <p class="card-text">
+                    {% if post.content|length > 50 %}
+                        {{ post.content|slice:":50" }}.. <span id="dots{{ forloop.counter }}" style="display: inline;">&nbsp;</span><span id="more{{ forloop.counter }}" style="display: none;">{{ post.content|slice:"50:" }}</span>
+                        <button onclick="showMore({{ forloop.counter }})" class="btn btn-link">Read more</button>
+                    {% else %}
+                        {{ post.content }}
+                    {% endif %}
+                </p>
+
+                {% if post.author == user %}
+                <a class="btn btn-primary" href="{% url 'blog_edit' post.id %}">
+                    Edit
+                </a>
+                <a class="btn btn-danger" href="{% url 'blog_delete' post.id %}">
+                    Delete
+                </a>
+                {% endif %}
+              
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <script>
+        function showMore(index) {
+            var dots = document.getElementById("dots" + index);
+            var moreText = document.getElementById("more" + index);
+            var btnText = document.querySelector("#more" + index + " + button");
+
+            if (dots.style.display === "none") {
+                dots.style.display = "inline";
+                btnText.innerHTML = "Read more";
+                moreText.style.display = "none";
+            } else {
+                dots.style.display = "none";
+                btnText.innerHTML = "Read less";
+                moreText.style.display = "inline";
+            }
+        }
+    </script>
+{% endblock %}

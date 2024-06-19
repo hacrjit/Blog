@@ -1,0 +1,20 @@
+{% extends "layout.html" %}
+{% block title %}
+    Blog
+{% endblock %}
+{% block content %}
+    <h1>Welcome to Blog</h1>
+    <h2>
+        {% if form.instance.pk %}
+        Edit Blog
+        {% else %}
+        Create Blog
+        {% endif %}
+        <form method="post" enctype = "multipart/form-data" class = "form">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <input type="submit" value="Submit" class = "btn btn-primary">
+        </form>
+        {% comment %} <a href="{% url 'blog' %}">Back to blog</a> {% endcomment %}
+    </h2>
+{% endblock %}
